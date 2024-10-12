@@ -1,0 +1,18 @@
+Error fetching news: createArticleElements is not defined
+Error fetching news: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+Error fetching news: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+Error fetching news: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+Error fetching news: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+Creating article elements with data: {"articles":[{"content":"This is a sample article content.","image_url":"https://example.com/image.jpg","title":"Sample Article","translated_content":"This is a sample article content."}]}
+Received data from server: {"articles":[{"content":"This is a sample article content.","image_url":"https://example.com/image.jpg","title":"Sample Article","translated_content":"This is a sample article content."}]}
+Error fetching news: Invalid data structure: structured_content is missing or not an array
+Error fetching news: Invalid data structure: structured_content is missing or not an array
+Error fetching news: Invalid data structure: structured_content is missing or not an array
+Error fetching news: Invalid data structure: structured_content is missing or not an array
+Error fetching news: HTTP error! status: 500
+Received data from server: {"error":"Unable to fetch news"}
+Error fetching news: Unable to fetch news
+Error fetching news: Invalid data structure: structured_content is missing or not an array
+Error fetching news: Invalid data structure: structured_content is missing or not an array
+Error fetching news: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+Error fetching news: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
