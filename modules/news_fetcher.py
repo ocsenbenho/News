@@ -17,6 +17,15 @@ def fetch_news():
         logging.info("Đã nhận được phản hồi từ server")
         soup = BeautifulSoup(response.text, 'html.parser')
         
+        # Tìm tiêu đề h1
+        title = soup.find('h1')
+        if title:
+            title_text = title.text.strip()
+            logging.info("Đã tìm thấy tiêu đề: %s", title_text)
+        else:
+            title_text = "Không tìm thấy tiêu đề"
+            logging.warning("Không tìm thấy tiêu đề trong trang")
+        
         content = soup.find('article') or soup.find('div', class_='article-content') or soup.body
         
         if content is None:
@@ -25,8 +34,15 @@ def fetch_news():
         
         elements = content.find_all(['p', 'img'])
         
-        structured_content = []
-        for idx, element in enumerate(elements):
+        structured_content = [
+            {
+                'type': 'title',
+                'content': title_text,
+                'position': 0
+            }
+        ]
+        
+        for idx, element in enumerate(elements, start=1):
             if element.name == 'img':
                 src = element.get('src')
                 if src:

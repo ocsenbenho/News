@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request, send_from_directory, redirect, url_for
+from flask import Flask, jsonify, render_template, request, send_from_directory, redirect, url_for, Response
 from flask_cors import CORS
 from modules.translation import translate_text
 from modules.news_fetcher import fetch_news
@@ -28,48 +28,30 @@ js_handler.setLevel(logging.INFO)
 js_logger.addHandler(js_handler)
 js_logger.setLevel(logging.INFO)
 
+#logging.basicConfig(filename='app.log', level=logging.INFO, 
+                    #format='%(asctime)s - %(message)s', 
+                    #datefmt='%Y-%m-%d %H:%M:%S',
+                    #encoding='utf-8')  # Thêm tham số encoding='utf-8')  # Thêm tham số encoding='utf-8'
+
+
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 @app.route('/api/translate', methods=['POST'])
 def translate():
-    try:
-        data = request.json
-        app.logger.info(f"Received translation request: {data}")
-        
-        text = data.get('text')
-        target_language = data.get('target_language', 'en')
-        
-        if not text:
-            raise ValueError("No text provided for translation")
-        
-        app.logger.info(f"Translating text: '{text}' to {target_language}")
-        translated_text = translate_text(text, target_language)
-        
-        app.logger.info(f"Translated text: '{translated_text}'")
-        
-        if not translated_text:
-            raise ValueError("Translation failed")
-        
-        response_data = {
-            'translated_text': translated_text,
-            'show_ipa': True,  # Đảm bảo điều này được đặt thành True
-            'show_articles': False,
-            'translit_original': '',
-            'translit_translation': ''
-        }
-        
-        if target_language == 'en':
-            try:
-                phonetic_transcriptions = get_phonetic_transcriptions(translated_text)
-                app.logger.info(f"Phonetic transcriptions: {phonetic_transcriptions}")  # Log để debug
-                response_data['phonetic_transcriptions'] = phonetic_transcriptions
-            except Exception as e:
-                app.logger.error(f"Error generating phonetic transcriptions: {str(e)}")
-                response_data['phonetic_transcriptions'] = []
-        
-        app.logger.info(f"Sending response: {response_data}")
-        return jsonify(response_data)
-    except Exception as e:
-        app.logger.error(f"Error in translate route: {str(e)}", exc_info=True)
-        return jsonify({'error': str(e)}), 500
+    data = request.json
+    text = data['text']
+    source_language = data.get('source_language', 'vi')
+    target_language = data.get('target_language', 'en')
+    
+    translated_text = translate_text(text, source_language, target_language)
+    
+    return jsonify({
+        'translated_text': translated_text,
+        'source_language': source_language,
+        'target_language': target_language
+    })
 
 @app.route('/api/news')
 def get_news():
@@ -79,11 +61,11 @@ def get_news():
     news = c.fetchall()
     conn.close()
     
-    news_list = [{'id': row[0], 'type': row[1], 'content': row[2], 'position': row[3]} for row in news]
+    news_list = [{'id': row[0], 'type': row[1], 'content': row[2], 'position': row[3], 'title': row[4]} for row in news]
 
-    respone = jsonify(news_list)
-    respone.headers['Content-Type'] = 'application/json; charset=utf-8'
-    return respone
+    response = jsonify(news_list)
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    return response
 
 @app.route('/api/log', methods=['POST'])
 def log_js():
@@ -102,28 +84,52 @@ def send_static(path):
 # Hàm để lấy và lưu trữ dữ liệu
 def fetch_and_store_news():
     news_data = fetch_news()
+    print(news_data)
     structured_content = news_data.get('structured_content', [])
 
     conn = sqlite3.connect('news.db')
     c = conn.cursor()
 
-    # Tạo bảng nếu nó chưa tồn tại
     c.execute('''CREATE TABLE IF NOT EXISTS news
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
                   type TEXT,
                   content TEXT,
-                  position INTEGER)''')
+                  position INTEGER,
+                  title TEXT)''')
 
-    # Xóa dữ liệu cũ
     c.execute("DELETE FROM news")
 
-    # Lưu dữ liệu mới
+    title = next((item['content'] for item in structured_content if item['type'] == 'title'), "No title")
+    app.logger.info(f"Structured content: {structured_content}")
+    app.logger.info(f"Title found: {title}")
     for item in structured_content:
-        c.execute("INSERT INTO news (type, content, position) VALUES (?, ?, ?)",
-                  (item['type'], item['content'], item['position']))
+        c.execute("INSERT INTO news (type, content, position, title) VALUES (?, ?, ?, ?)",
+                  (item['type'], item['content'], item['position'], title))
 
     conn.commit()
     conn.close()
+
+@app.route('/log')
+def get_log():
+    with open('app.log', 'r', encoding='utf-8') as f:
+        log_content = f.read()
+    return Response(log_content, mimetype='text/plain; charset=utf-8')
+
+@app.route('/api/get_translation', methods=['POST'])
+def get_translation():
+    data = request.json
+    url = data['url']
+
+    conn = sqlite3.connect('news.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT translated_content FROM news WHERE url = ?', (url,))
+    result = cursor.fetchone()
+    conn.close()
+
+    if result:
+        return jsonify({'translated_content': result[0]})
+    else:
+        return jsonify({'error': 'Translation not found'}), 404
 
 if __name__ == '__main__':
     fetch_and_store_news()  # Lấy và lưu dữ liệu khi khởi động server

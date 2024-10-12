@@ -213,7 +213,15 @@ function createArticleElements(data) {
     const articleContainer = document.getElementById('article-container');
     articleContainer.innerHTML = ''; // Clear existing content
 
-    data.forEach(item => {
+    // Add title
+    const titleElement = document.createElement('h1');
+    titleElement.className = 'article-title';
+    titleElement.textContent = data[0].title;
+    articleContainer.appendChild(titleElement);
+
+    data.forEach((item, index) => {
+        if (item.type === 'title') return; // Skip title, as we've already added it
+
         const element = document.createElement('div');
         element.className = 'article-item';
 
@@ -222,7 +230,11 @@ function createArticleElements(data) {
                 element.innerHTML = `<img src="${item.content}" alt="Article image" class="article-image" data-id="${item.id}" data-position="${item.position}">`;
                 break;
             case 'text':
-                element.innerHTML = `<p class="article-text" data-id="${item.id}" data-position="${item.position}">${item.content}</p>`;
+                element.innerHTML = `
+                    <p class="article-text" data-id="${item.id}" data-position="${item.position}">${item.content}</p>
+                    <button onclick="translateParagraph(${index})" class="translate-button">Translate to English</button>
+                    <div id="translation-${index}" class="translation"></div>
+                `;
                 break;
             default:
                 console.log(`Unknown type: ${item.type}`);
@@ -230,8 +242,6 @@ function createArticleElements(data) {
 
         articleContainer.appendChild(element);
     });
-
-    attachTranslateEvents();
 }
 
 function fetchNews() {
@@ -257,3 +267,69 @@ function fetchNews() {
 
 // Call fetchNews when the page loads
 document.addEventListener('DOMContentLoaded', fetchNews);
+
+function translateToEnglish(text, apiUrl = '/api/translate') {
+    return fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: text, target_language: 'en' }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.translated_text) {
+            return data.translated_text;
+        } else {
+            throw new Error('Translation failed');
+        }
+    });
+}
+
+function translateParagraph(index) {
+    const paragraph = document.querySelector(`.article-text[data-position="${index}"]`);
+    const translationDiv = document.getElementById(`translation-${index}`);
+    const translateButton = translationDiv.previousElementSibling;
+
+    if (translationDiv.style.display === 'block') {
+        translationDiv.style.display = 'none';
+        translateButton.textContent = 'Translate to English';
+    } else {
+        translateButton.disabled = true;
+        translateButton.textContent = 'Translating...';
+        translateToEnglish(paragraph.textContent)
+            .then(translation => {
+                translationDiv.textContent = translation;
+                translationDiv.style.display = 'block';
+                translateButton.textContent = 'Hide Translation';
+            })
+            .catch(error => {
+                console.error('Translation error:', error);
+                translationDiv.textContent = 'Translation failed. Please try again.';
+                translationDiv.style.display = 'block';
+            })
+            .finally(() => {
+                translateButton.disabled = false;
+            });
+    }
+}
+
+function showTranslation(url) {
+    fetch('/api/get_translation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: url }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.translated_content) {
+            document.getElementById('content').innerHTML = data.translated_content;
+        } else {
+            console.error('Translation not found');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+    
+}

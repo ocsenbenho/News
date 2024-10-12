@@ -21,12 +21,12 @@ h1 {
 }
 
 .translate-button {
-    background-color: #3498db;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
     color: white;
     border: none;
-    padding: 10px 20px;
     cursor: pointer;
-    border-radius: 4px;
 }
 
 .translate-button:hover {
@@ -192,4 +192,12 @@ footer {
 .article-text {
     font-size: 16px;
     line-height: 1.5;
+}
+
+.translation {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    display: none;
 }
