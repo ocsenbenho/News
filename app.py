@@ -139,6 +139,106 @@ def get_translation():
         app.logger.warning("Translation not found in database")
         return jsonify({'error': 'Translation not found'}), 404
 
+def create_fairy_tales_table():
+    conn = sqlite3.connect('news.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS fairy_tales (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        author TEXT,
+        english_title TEXT,
+        english_content TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
+    
+    # Kiểm tra và thêm các cột còn thiếu
+    columns_to_add = [
+        ('author', 'TEXT'),
+        ('english_title', 'TEXT'),
+        ('english_content', 'TEXT'),
+        ('created_at', 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP')
+    ]
+    
+    for column, data_type in columns_to_add:
+        cursor.execute(f"PRAGMA table_info(fairy_tales)")
+        existing_columns = [row[1] for row in cursor.fetchall()]
+        if column not in existing_columns:
+            cursor.execute(f"ALTER TABLE fairy_tales ADD COLUMN {column} {data_type}")
+    
+    conn.commit()
+    conn.close()
+
+# Gọi hàm này khi khởi động ứng dụng
+create_fairy_tales_table()
+
+@app.route('/api/fairy_tale', methods=['POST'])
+def add_fairy_tale():
+    data = request.json
+    title = data['title']
+    content = data['content']
+    author = data.get('author', 'Unknown')
+
+    # Dịch tiêu đề và nội dung sang tiếng Anh
+    english_title = translate_text(title, 'vi', 'en')
+    english_content = translate_text(content, 'vi', 'en')
+
+    conn = sqlite3.connect('news.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    INSERT INTO fairy_tales (title, content, author, english_title, english_content)
+    VALUES (?, ?, ?, ?, ?)
+    ''', (title, content, author, english_title, english_content))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Fairy tale added successfully"}), 201
+
+@app.route('/api/fairy_tales', methods=['GET'])
+def get_fairy_tales():
+    conn = sqlite3.connect('news.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, title, author FROM fairy_tales')
+    fairy_tales = cursor.fetchall()
+    conn.close()
+
+    return jsonify([{"id": tale[0], "title": tale[1], "author": tale[2]} for tale in fairy_tales])
+
+@app.route('/api/fairy_tale/<int:tale_id>', methods=['GET'])
+def get_fairy_tale(tale_id):
+    try:
+        conn = sqlite3.connect('news.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM fairy_tales WHERE id = ?', (tale_id,))
+        tale = cursor.fetchone()
+        
+
+        if tale:
+            # Lấy tên các cột trong bảng
+            cursor.execute('PRAGMA table_info(fairy_tales)')
+            columns = [column[1] for column in cursor.fetchall()]
+            
+            # Tạo dictionary với các cột hiện có
+            tale_dict = {columns[i]: tale[i] for i in range(len(tale))}
+            
+            # Thêm các trường còn thiếu với giá trị mặc định
+            expected_fields = ["id", "title", "content", "author", "english_title", "english_content", "created_at"]
+            for field in expected_fields:
+                if field not in tale_dict:
+                    tale_dict[field] = None
+            
+            return jsonify(tale_dict)
+        else:
+            logging.warning(f"Fairy tale with id {tale_id} not found")
+            return jsonify({"error": "Fairy tale not found"}), 404
+    except Exception as e:
+        logging.error(f"Error fetching fairy tale: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+    finally:
+        conn.close()
+
 if __name__ == '__main__':
     app.logger.info("Starting the application")
     fetch_and_store_news()  # Lấy và lưu dữ liệu khi khởi động server
