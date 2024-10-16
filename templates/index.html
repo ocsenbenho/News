@@ -3,19 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tin tức</title>
+    <title>Tin tức và Truyện cổ tích</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Cổng Thông Tin Tin Tức</h1>
-    </header>
-    <main>
-        <div id="article-container"></div>
-        <div id="error-container"></div>
-    </main>
+    <div class="menu-toggle" id="hamburger">
+        <i class="fas fa-bars"></i>
+    </div>
+    <div class="overlay"></div>
+    <div class="container">
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="#" id="news-link">Đọc báo</a></li>
+                <li><a href="#" id="fairy-tales-link">Đọc truyện</a></li>
+            </ul>
+        </nav>
+        <main>
+            <header>
+                <h1>Cổng Thông Tin Tin Tức và Truyện Cổ Tích</h1>
+            </header>
+            <div id="content">
+                <div id="article-container"></div>
+                <div id="error-container"></div>
+                <div id="fairy-tales-container" style="display: none;">
+                    <h2>Truyện Cổ Tích</h2>
+                    <ul id="fairy-tales-list"></ul>
+                </div>
+                <div id="fairy-tale-content" style="display: none;">
+                    <h2 id="fairy-tale-title"></h2>
+                    <p><em id="fairy-tale-author"></em></p>
+                    <div class="bilingual-content">
+                        <div class="vietnamese-content">
+                            <h3>Tiếng Việt</h3>
+                            <p id="fairy-tale-content-vi"></p>
+                        </div>
+                        <div class="english-content">
+                            <h3>English</h3>
+                            <p id="fairy-tale-content-en"></p>
+                        </div>
+                    </div>
+                    <button onclick="showFairyTalesList()">Quay lại danh sách</button>
+                </div>
+            </div>
+        </main>
+    </div>
     <footer>
-        <p>&copy; 2023 Cổng Thông Tin Tin Tức. Bảo lưu mọi quyền.</p>
+        <p>&copy; 2023 Cổng Thông Tin Tin Tức và Truyện Cổ Tích. Bảo lưu mọi quyền.</p>
     </footer>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

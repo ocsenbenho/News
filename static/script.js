@@ -333,3 +333,137 @@ function showTranslation(url) {
     .catch(error => console.error('Error:', error));
     
 }
+
+function fetchFairyTales() {
+    console.log('Fetching fairy tales');
+    fetch('/api/fairy_tales')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fairy tales data received:', data);
+            const fairyTalesList = document.getElementById('fairy-tales-list');
+            fairyTalesList.innerHTML = '';
+            if (data.length === 0) {
+                fairyTalesList.innerHTML = '<li>Không có truyện cổ tích nào.</li>';
+            } else {
+                data.forEach(tale => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.textContent = tale.title;
+                    a.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        showFairyTale(tale.id);
+                    });
+                    li.appendChild(a);
+                    li.appendChild(document.createTextNode(` by ${tale.author}`));
+                    fairyTalesList.appendChild(li);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching fairy tales:', error);
+            const fairyTalesList = document.getElementById('fairy-tales-list');
+            fairyTalesList.innerHTML = '<li>Lỗi khi tải truyện cổ tích. Vui lòng thử lại sau.</li>';
+        });
+}
+
+function showFairyTale(taleId) {
+    console.log('Showing fairy tale with ID:', taleId);
+    fetch(`/api/fairy_tale/${taleId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fairy tale data received:', data);
+            document.getElementById('fairy-tales-list').style.display = 'none';
+            const contentDiv = document.getElementById('fairy-tale-content');
+            contentDiv.style.display = 'block';
+            document.getElementById('fairy-tale-title').textContent = data.title;
+            document.getElementById('fairy-tale-author').textContent = `Tác giả: ${data.author}`;
+            document.getElementById('fairy-tale-content-vi').textContent = data.content;
+            document.getElementById('fairy-tale-content-en').textContent = data.english_content;
+        })
+        .catch(error => {
+            console.error('Error fetching fairy tale:', error);
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.textContent = `Error fetching fairy tale: ${error.message}`;
+        });
+}
+
+function showFairyTalesList() {
+    document.getElementById('fairy-tale-content').style.display = 'none';
+    document.getElementById('fairy-tales-list').style.display = 'block';
+}
+
+// Định nghĩa các biến toàn cục
+let articleContainer, fairyTalesContainer, fairyTalesLink, newsLink;
+
+// Hàm khởi tạo
+function initializeApp() {
+    articleContainer = document.getElementById('article-container');
+    fairyTalesContainer = document.getElementById('fairy-tales-container');
+    fairyTalesLink = document.getElementById('fairy-tales-link');
+    newsLink = document.getElementById('news-link');
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.overlay');
+
+    // Kiểm tra xem các elements có tồn tại không
+    if (!articleContainer || !fairyTalesContainer || !fairyTalesLink || !newsLink || !hamburger || !sidebar || !overlay) {
+        console.error('One or more required elements are missing');
+        return;
+    }
+
+    // Thêm event listeners
+    fairyTalesLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showFairyTales();
+    });
+
+    newsLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showNews();
+    });
+
+    hamburger.addEventListener('click', function() {
+        sidebar.style.left = sidebar.style.left === '0px' ? '-250px' : '0px';
+        overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+    });
+
+    overlay.addEventListener('click', function() {
+        sidebar.style.left = '-250px';
+        overlay.style.display = 'none';
+    });
+
+    // Khởi đầu với tin tức
+    showNews();
+}
+
+// Hàm hiển thị phần truyện cổ tích
+function showFairyTales() {
+    console.log('Showing fairy tales');
+    articleContainer.style.display = 'none';
+    fairyTalesContainer.style.display = 'block';
+    document.getElementById('fairy-tale-content').style.display = 'none';
+    document.getElementById('fairy-tales-list').style.display = 'block';
+    fetchFairyTales();
+}
+
+// Hàm hiển thị phần tin tức
+function showNews() {
+    console.log('Showing news');
+    fairyTalesContainer.style.display = 'none';
+    articleContainer.style.display = 'block';
+    fetchNews();
+}
+
+// Gọi hàm khởi tạo khi trang đã tải xong
+document.addEventListener('DOMContentLoaded', initializeApp);
