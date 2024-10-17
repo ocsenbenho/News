@@ -1,21 +1,8 @@
-Creating news table if not exists
-Deleting existing news data
-Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/icon_youtube_fill.svg', 'position': 1}
-Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/icon_facebook_full_color.svg', 'position': 2}
-Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/Icon_Tiktok_fill.svg', 'position': 3}
-Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/icon_zalo_full_color.svg', 'position': 4}
-Inserting item: {'type': 'image', 'content': 'https://static.thanhnien.com.vn/thanhnien.vn/image/logo.svg', 'position': 5}
-Inserting item: {'type': 'image', 'content': 'https://static.thanhnien.com.vn/thanhnien.vn/image/ava_inter.png', 'position': 6}
-Inserting item: {'type': 'image', 'content': 'https://static.thanhnien.com.vn/thanhnien.vn/image/ava_inter.png', 'position': 7}
-Inserting item: {'type': 'image', 'content': 'https://images2.thanhnien.vn/thumb_w/640/528068263637045248/2024/10/11/828e8e4733768a28d367-1728645409408821288532.jpg', 'position': 9}
-Inserting item: {'type': 'image', 'content': 'https://images2.thanhnien.vn/thumb_w/640/528068263637045248/2024/10/11/59af1cefbfde06805fcf-17286454093571382834390.jpg', 'position': 16}
-Inserting item: {'type': 'image', 'content': 'https://images2.thanhnien.vn/zoom/205_128/528068263637045248/2024/10/11/40e26fb9568fefd1b69e-1728639012970236386302-54-0-854-1280-crop-1728639216409495170208.jpg', 'position': 27}
-Inserting item: {'type': 'image', 'content': 'https://static.thanhnien.com.vn/thanhnien.vn/image/logo-ft.png', 'position': 29}
-Inserting item: {'type': 'text', 'content': 'Hotline', 'position': 30}
-Inserting item: {'type': 'text', 'content': '0906 645 777', 'position': 31}
-Inserting item: {'type': 'text', 'content': '0908 780 404', 'position': 33}
-Inserting item: {'type': 'image', 'content': 'https://tinnhiemmang.vn/handle_cert?id=thanhnien.vn', 'position': 39}
-Finished fetch_and_store_news
+Starting translation of fairy tales
+Starting translation of fairy tales
+Translating fairy tale with ID: 1
+Successfully translated and updated fairy tale with ID: 1
+Finished translating fairy tales
 Starting the application
 Starting fetch_and_store_news
 Creating news table if not exists
@@ -36,6 +23,32 @@ Inserting item: {'type': 'text', 'content': '0906 645 777', 'position': 31}
 Inserting item: {'type': 'text', 'content': '0908 780 404', 'position': 33}
 Inserting item: {'type': 'image', 'content': 'https://tinnhiemmang.vn/handle_cert?id=thanhnien.vn', 'position': 39}
 Finished fetch_and_store_news
+Starting translation of fairy tales
+Finished translating fairy tales
+Starting translation of fairy tales
+Finished translating fairy tales
+Starting the application
+Starting fetch_and_store_news
+Creating news table if not exists
+Deleting existing news data
+Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/icon_youtube_fill.svg', 'position': 1}
+Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/icon_facebook_full_color.svg', 'position': 2}
+Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/Icon_Tiktok_fill.svg', 'position': 3}
+Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/icon_zalo_full_color.svg', 'position': 4}
+Inserting item: {'type': 'image', 'content': 'https://static.thanhnien.com.vn/thanhnien.vn/image/logo.svg', 'position': 5}
+Inserting item: {'type': 'image', 'content': 'https://static.thanhnien.com.vn/thanhnien.vn/image/ava_inter.png', 'position': 6}
+Inserting item: {'type': 'image', 'content': 'https://static.thanhnien.com.vn/thanhnien.vn/image/ava_inter.png', 'position': 7}
+Inserting item: {'type': 'image', 'content': 'https://images2.thanhnien.vn/thumb_w/640/528068263637045248/2024/10/11/828e8e4733768a28d367-1728645409408821288532.jpg', 'position': 9}
+Inserting item: {'type': 'image', 'content': 'https://images2.thanhnien.vn/thumb_w/640/528068263637045248/2024/10/11/59af1cefbfde06805fcf-17286454093571382834390.jpg', 'position': 16}
+Inserting item: {'type': 'image', 'content': 'https://images2.thanhnien.vn/zoom/205_128/528068263637045248/2024/10/11/40e26fb9568fefd1b69e-1728639012970236386302-54-0-854-1280-crop-1728639216409495170208.jpg', 'position': 27}
+Inserting item: {'type': 'image', 'content': 'https://static.thanhnien.com.vn/thanhnien.vn/image/logo-ft.png', 'position': 29}
+Inserting item: {'type': 'text', 'content': 'Hotline', 'position': 30}
+Inserting item: {'type': 'text', 'content': '0906 645 777', 'position': 31}
+Inserting item: {'type': 'text', 'content': '0908 780 404', 'position': 33}
+Inserting item: {'type': 'image', 'content': 'https://tinnhiemmang.vn/handle_cert?id=thanhnien.vn', 'position': 39}
+Finished fetch_and_store_news
+Starting translation of fairy tales
+Finished translating fairy tales
 Rendering index page
 Fetching news from database
 Retrieved 41 news items
@@ -43,9 +56,8 @@ Fetching news from database
 Retrieved 41 news items
 Fetching news from database
 Retrieved 41 news items
-Received translation request
-Translating from vi to en
-Translation completed
+Starting translation of fairy tales
+Finished translating fairy tales
 Starting the application
 Starting fetch_and_store_news
 Creating news table if not exists
@@ -66,6 +78,8 @@ Inserting item: {'type': 'text', 'content': '0906 645 777', 'position': 31}
 Inserting item: {'type': 'text', 'content': '0908 780 404', 'position': 33}
 Inserting item: {'type': 'image', 'content': 'https://tinnhiemmang.vn/handle_cert?id=thanhnien.vn', 'position': 39}
 Finished fetch_and_store_news
+Starting translation of fairy tales
+Finished translating fairy tales
 Rendering index page
 Fetching news from database
 Retrieved 41 news items
@@ -73,6 +87,10 @@ Fetching news from database
 Retrieved 41 news items
 Fetching news from database
 Retrieved 41 news items
+Starting translation of fairy tales
+Translating fairy tale with ID: 1
+Successfully translated and updated fairy tale with ID: 1
+Finished translating fairy tales
 Starting the application
 Starting fetch_and_store_news
 Creating news table if not exists
@@ -93,18 +111,10 @@ Inserting item: {'type': 'text', 'content': '0906 645 777', 'position': 31}
 Inserting item: {'type': 'text', 'content': '0908 780 404', 'position': 33}
 Inserting item: {'type': 'image', 'content': 'https://tinnhiemmang.vn/handle_cert?id=thanhnien.vn', 'position': 39}
 Finished fetch_and_store_news
+Starting translation of fairy tales
+Finished translating fairy tales
 Rendering index page
 Fetching news from database
 Retrieved 41 news items
 Fetching news from database
 Retrieved 41 news items
-Fetching news from database
-Retrieved 41 news items
-Starting the application
-Starting fetch_and_store_news
-Creating news table if not exists
-Deleting existing news data
-Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/icon_youtube_fill.svg', 'position': 1}
-Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/icon_facebook_full_color.svg', 'position': 2}
-Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/Icon_Tiktok_fill.svg', 'position': 3}
-Inserting item: {'type': 'image', 'content': 'https://thanhnien-static.mediacdn.vn/thanhnien.vn/image/icon_zalo_full_color.svg', 'position': 4}
