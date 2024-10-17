@@ -386,16 +386,29 @@ function showFairyTale(taleId) {
             document.getElementById('fairy-tales-list').style.display = 'none';
             const contentDiv = document.getElementById('fairy-tale-content');
             contentDiv.style.display = 'block';
-            document.getElementById('fairy-tale-title').textContent = data.title;
-            document.getElementById('fairy-tale-author').textContent = `Tác giả: ${data.author}`;
-            document.getElementById('fairy-tale-content-vi').textContent = data.content;
-            document.getElementById('fairy-tale-content-en').textContent = data.english_content;
+            
+            // Cập nhật tiêu đề
+            document.getElementById('fairy-tale-title').textContent = data.title || 'Không có tiêu đề';
+            document.getElementById('fairy-tale-english-title').textContent = data.english_title || 'No title';
+            
+            // Cập nhật tác giả
+            document.getElementById('fairy-tale-author').textContent = `Tác giả: ${data.author || 'Không rõ'}`;
+            document.getElementById('fairy-tale-english-author').textContent = `Author: ${data.english_author || 'Unknown'}`;
+            
+            // Xử lý văn bản có định dạng
+            document.getElementById('fairy-tale-content-vi').innerHTML = formatText(data.content || 'Không có nội dung.');
+            document.getElementById('fairy-tale-content-en').innerHTML = formatText(data.english_content || 'No content available.');
         })
         .catch(error => {
             console.error('Error fetching fairy tale:', error);
             const errorContainer = document.getElementById('error-container');
             errorContainer.textContent = `Error fetching fairy tale: ${error.message}`;
         });
+}
+
+function formatText(text) {
+    // Thay thế xuống dòng bằng thẻ <p>
+    return text.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('');
 }
 
 function showFairyTalesList() {

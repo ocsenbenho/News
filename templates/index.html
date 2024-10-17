@@ -32,19 +32,25 @@
                     <ul id="fairy-tales-list"></ul>
                 </div>
                 <div id="fairy-tale-content" style="display: none;">
-                    <h2 id="fairy-tale-title"></h2>
-                    <p><em id="fairy-tale-author"></em></p>
+                    <div class="fairy-tale-header">
+                        <h2 id="fairy-tale-title" class="fairy-tale-title"></h2>
+                        <h2 id="fairy-tale-english-title" class="fairy-tale-title"></h2>
+                    </div>
+                    <div class="fairy-tale-author-container">
+                        <p><em id="fairy-tale-author" class="fairy-tale-author"></em></p>
+                        <p><em id="fairy-tale-english-author" class="fairy-tale-author"></em></p>
+                    </div>
                     <div class="bilingual-content">
                         <div class="vietnamese-content">
-                            <h3>Tiếng Việt</h3>
-                            <p id="fairy-tale-content-vi"></p>
+                            <h3 class="language-title">Tiếng Việt</h3>
+                            <div id="fairy-tale-content-vi" class="fairy-tale-text"></div>
                         </div>
                         <div class="english-content">
-                            <h3>English</h3>
-                            <p id="fairy-tale-content-en"></p>
+                            <h3 class="language-title">English</h3>
+                            <div id="fairy-tale-content-en" class="fairy-tale-text"></div>
                         </div>
                     </div>
-                    <button onclick="showFairyTalesList()">Quay lại danh sách</button>
+                    <button onclick="showFairyTalesList()" class="back-button">Quay lại danh sách</button>
                 </div>
             </div>
         </main>

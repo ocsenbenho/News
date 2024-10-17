@@ -150,6 +150,7 @@ def create_fairy_tales_table():
         author TEXT,
         english_title TEXT,
         english_content TEXT,
+        english_author TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     ''')
@@ -159,6 +160,7 @@ def create_fairy_tales_table():
         ('author', 'TEXT'),
         ('english_title', 'TEXT'),
         ('english_content', 'TEXT'),
+        ('english_author', 'TEXT'),
         ('created_at', 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP')
     ]
     
@@ -184,7 +186,7 @@ def add_fairy_tale():
     # Dịch tiêu đề và nội dung sang tiếng Anh
     english_title = translate_text(title, 'vi', 'en')
     english_content = translate_text(content, 'vi', 'en')
-
+    english_author = translate_text(author, 'vi', 'en')
     conn = sqlite3.connect('news.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -239,7 +241,40 @@ def get_fairy_tale(tale_id):
     finally:
         conn.close()
 
+def translate_fairy_tales():
+    app.logger.info("Starting translation of fairy tales")
+    conn = sqlite3.connect('news.db')
+    cursor = conn.cursor()
+
+    # Lấy tất cả các truyện chưa được dịch
+    cursor.execute('SELECT id, title, content, author FROM fairy_tales WHERE english_title IS NULL OR english_content IS NULL OR english_title = "" OR english_content = "" OR english_author IS NULL OR english_author =""')
+    untranslated_tales = cursor.fetchall()
+
+    for tale_id,title, content, author in untranslated_tales:
+        app.logger.info(f"Translating fairy tale with ID: {tale_id}")
+        try:
+            # Dịch nội dung
+            english_title = translate_text(title, 'vi', 'en')
+            english_content = translate_text(content, 'vi', 'en')
+            english_author = translate_text(author, 'vi', 'en')
+
+            # Cập nhật cơ sở dữ liệu với bản dịch
+            
+            cursor.execute('UPDATE fairy_tales SET english_title = ?, english_author = ?, english_content = ? WHERE id = ?', (english_title, english_author, english_content, tale_id))
+            conn.commit()
+            app.logger.info(f"Successfully translated and updated fairy tale with ID: {tale_id}")
+        except Exception as e:
+            app.logger.error(f"Error translating fairy tale with ID {tale_id}: {str(e)}")
+            conn.rollback()
+
+    conn.close()
+    app.logger.info("Finished translating fairy tales")
+
+# Gọi hàm này khi khởi động ứng dụng hoặc theo lịch trình
+translate_fairy_tales()
+
 if __name__ == '__main__':
     app.logger.info("Starting the application")
     fetch_and_store_news()  # Lấy và lưu dữ liệu khi khởi động server
+    translate_fairy_tales()  # Dịch các truyện cổ tích chưa được dịch
     app.run(debug=True)
