@@ -480,3 +480,57 @@ function showNews() {
 
 // Gọi hàm khởi tạo khi trang đã tải xong
 document.addEventListener('DOMContentLoaded', initializeApp);
+
+document.getElementById('fairy-tale-content-en').addEventListener('mouseup', function() {
+    const selectedText = window.getSelection().toString().trim();
+    if (selectedText) {
+        const context = this.innerText;
+        saveWord(selectedText, context);
+    }
+});
+
+function saveWord(word, context) {
+    fetch('/api/save_word', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ word: word, context: context }),
+    })
+    .then(response => response.json())
+    .then(data => console.log('Word saved:', data))
+    .catch(error => console.error('Error saving word:', error));
+}
+
+let currentWord = '';
+let currentContext = '';
+
+function showFlashCard() {
+    document.getElementById('flash-card').style.display = 'block';
+    getRandomWord();
+}
+
+function getRandomWord() {
+    fetch('/api/random_word')
+        .then(response => response.json())
+        .then(data => {
+            currentWord = data.word;
+            currentContext = data.context;
+            document.getElementById('word-display').textContent = currentWord;
+            document.getElementById('context-display').style.display = 'none';
+            document.getElementById('context-display').textContent = currentContext;
+        })
+        .catch(error => console.error('Error fetching random word:', error));
+}
+
+document.getElementById('show-context').addEventListener('click', function() {
+    document.getElementById('context-display').style.display = 'block';
+});
+
+document.getElementById('next-word').addEventListener('click', getRandomWord);
+
+// Thêm nút để hiển thị flash card
+const flashCardButton = document.createElement('button');
+flashCardButton.textContent = 'Show Flash Cards';
+flashCardButton.addEventListener('click', showFlashCard);
+document.querySelector('.container').appendChild(flashCardButton);
