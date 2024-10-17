@@ -241,6 +241,36 @@ def get_fairy_tale(tale_id):
     finally:
         conn.close()
 
+@app.route('/api/save_word', methods=['POST'])
+def save_word():
+    data = request.json
+    word = data.get('word')
+    context = data.get('context', '')
+    
+    if not word:
+        return jsonify({"error": "No word provided"}), 400
+    
+    conn = sqlite3.connect('news.db')
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO note_word (word, context) VALUES (?, ?)', (word, context))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({"message": "Word saved successfully"}), 200
+
+@app.route('/api/random_word', methods=['GET'])
+def get_random_word():
+    conn = sqlite3.connect('news.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT word, context FROM note_word ORDER BY RANDOM() LIMIT 1')
+    result = cursor.fetchone()
+    conn.close()
+    
+    if result:
+        return jsonify({"word": result[0], "context": result[1]}), 200
+    else:
+        return jsonify({"error": "No words found"}), 404
+    
 def translate_fairy_tales():
     app.logger.info("Starting translation of fairy tales")
     conn = sqlite3.connect('news.db')
@@ -272,6 +302,20 @@ def translate_fairy_tales():
 
 # Gọi hàm này khi khởi động ứng dụng hoặc theo lịch trình
 translate_fairy_tales()
+
+def create_note_word_table():
+    conn = sqlite3.connect('news.db')
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS note_word
+                      (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                       word TEXT NOT NULL,
+                       context TEXT,
+                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+    conn.commit()
+    conn.close()
+
+# Gọi hàm này khi khởi động ứng dụng
+create_note_word_table()
 
 if __name__ == '__main__':
     app.logger.info("Starting the application")

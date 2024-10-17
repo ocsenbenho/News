@@ -152,3 +152,20 @@ button:hover {
 .back-button:hover {
     background-color: #45a049;
 }
+
+#flash-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+#word-display {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#context-display {
+    margin-top: 10px;
+    font-style: italic;
+}
