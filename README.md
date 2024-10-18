@@ -1,55 +1,26 @@
-# Cổng Thông Tin Tin Tức
-
-## Mô tả
-Đây là một ứng dụng web hiển thị tin tức, cho phép người dùng xem các bài viết và hình ảnh. Ứng dụng được xây dựng bằng Flask (Python) cho phía server và JavaScript cho phía client.
-
-## Yêu cầu hệ thống
-- Python 3.x
-- Flask
-- requierment.txt
-
-## Cài đặt
-1. Clone repository này:
-   ```
-   git clone [URL của repository này]
-   ```
-
-2. Di chuyển vào thư mục dự án:
-   ```
-   cd [tên thư mục dự án]
-   ```
-
-3. Cài đặt các thư viện cần thiết:
-   ```
-   pip install -r requirements.txt
-   ```
-
-## Cấu hình
-[Mô tả bất kỳ bước cấu hình nào cần thiết, ví dụ: thiết lập cơ sở dữ liệu, biến môi trường, etc.]
-
-## Chạy ứng dụng
-1. Khởi động server Flask:
-   ```
-   python app.py
-   ```
-
-2. Mở trình duyệt web và truy cập:
-   ```
-   http://localhost:5000
-   ```
-
-## Cấu trúc dự án
-project/
-│
-├── static/
-│ ├── styles.css
-│ └── script.js
-│
-├── templates/
-│ ├── index.html
-│ └── error.html
-│
-├── app.py
-├── requirements.txt
-└── README.md
-
+Import và Cấu hình:
+Import các module cần thiết từ Flask và các module tùy chỉnh.
+Cấu hình logging cho server và JavaScript.
+Các route API:
+/api/translate: Dùng để dịch văn bản.
+/api/news: Lấy tin tức từ cơ sở dữ liệu.
+/api/log: Ghi log từ JavaScript.
+/api/get_translation: Lấy bản dịch đã lưu.
+/api/fairy_tale: Thêm truyện cổ tích mới.
+/api/fairy_tales: Lấy danh sách truyện cổ tích.
+/api/fairy_tale/<int:tale_id>: Lấy chi tiết một truyện cổ tích.
+/api/save_word: Lưu từ vựng.
+/api/random_word: Lấy một từ vựng ngẫu nhiên.
+Các hàm hỗ trợ:
+fetch_and_store_news(): Lấy và lưu tin tức vào cơ sở dữ liệu.
+create_fairy_tales_table(): Tạo bảng truyện cổ tích trong cơ sở dữ liệu.
+translate_fairy_tales(): Dịch các truyện cổ tích chưa được dịch.
+create_note_word_table(): Tạo bảng lưu từ vựng.
+Xử lý cơ sở dữ liệu:
+Sử dụng SQLite để lưu trữ tin tức, truyện cổ tích và từ vựng.
+Xử lý đa ngôn ngữ:
+Hỗ trợ dịch thuật giữa tiếng Việt và tiếng Anh cho truyện cổ tích.
+Logging:
+Cấu hình logging chi tiết cho cả server và JavaScript.
+Khởi động ứng dụng:
+Khi khởi động, ứng dụng sẽ lấy và lưu tin tức, dịch các truyện cổ tích chưa được dịch.
